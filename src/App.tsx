@@ -1,24 +1,47 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from "react";
+import "./App.css";
+import UserCard from "./UserCard";
 
 function App() {
+  const [users, setUsers] = useState<Usercard[]>([]);
+  const [usersHidden, setUsersHidden] = useState(false);
+
+  useEffect(() => {
+    // Mock an API call to get user data.
+    setTimeout(() => {
+      setUsers([
+        {
+          name: "John Doe",
+          email: "johndoe@example.com",
+          phone: "123-456-7890",
+        },
+        {
+          name: "Adam Smith",
+          email: "adamsmith@example.com",
+          phone: "123-456-7890",
+        },
+        {
+          name: "Kelly Evans",
+          email: "kellyevans@example.com",
+          phone: "123-456-7890",
+        },
+      ]);
+    }, 1000);
+  }, []);
+
+  if (!users) {
+    return <p>Loading..</p>;
+  }
+
+  const userCards = users.map((user) => <UserCard user={user} />);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {usersHidden && userCards}
+      <button onClick={() => setUsersHidden(!usersHidden)}>
+        Toggle user cards
+      </button>
+      {!usersHidden && <p>All users currently hidden</p>}
     </div>
   );
 }
